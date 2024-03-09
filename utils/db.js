@@ -8,22 +8,31 @@ class DBClient {
     this.url = `mongodb://${this.host}:${this.port}`;
     this.client = new MongoClient(this.url, { useUnifiedTopology: true });
     this.isConnected = false;
-    this.client.connect()
-      .then(() => {
+    this.client.connect((err) => {
+      if (err) {
+        this.isConnected = false;
+        console.log(err.message);
+      } else {
         this.isConnected = true;
         this.db = this.client.db(this.database);
+      }
+    });
+    // this.client.connect()
+    //   .then(() => {
+    //     this.isConnected = true;
+    //     this.db = this.client.db(this.database);
 
-        this.client.on('close', () => {
-          this.isConnected = false;
-        });
+    //     this.client.on('close', () => {
+    //       this.isConnected = false;
+    //     });
 
-        this.client.on('reconnect', () => {
-          this.isConnected = true;
-        });
-      })
-      .catch((err) => {
-        console.log('could not connect to MongoDB: ', err);
-      });
+    //     this.client.on('reconnect', () => {
+    //       this.isConnected = true;
+    //     });
+    //   })
+    //   .catch((err) => {
+    //     console.log('could not connect to MongoDB: ', err);
+    //   });
   }
 
   isAlive() {
