@@ -39,9 +39,9 @@ class DBClient {
     return this.isConnected;
   }
 
-  async nbUsers() {
+  async nbUsers(query = {}) {
     try {
-      const usersCount = await this.db.collection('users').countDocuments();
+      const usersCount = await this.db.collection('users').countDocuments(query);
       return usersCount;
     } catch (error) {
       console.log(error.message);
@@ -57,6 +57,15 @@ class DBClient {
       console.log(error.message);
       throw error;
     }
+  }
+
+  async addNewUser(newUser) {
+    try {
+      return await this.db.collection('users').insertOne(newUser);
+    } catch (erroe) {
+      console.log(erroe);
+    }
+    return undefined;
   }
 }
 
