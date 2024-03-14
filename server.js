@@ -1,15 +1,15 @@
+import { env } from 'process';
 import express from 'express';
-import controllerRouting from './routes/index';
+import router from './routes/index';
 
 const app = express();
-const port = process.env.PORT || 5000;
+const port = env.PORT || 5000;
 
-app.use(express.json());
+// Parse JSON request bodies
+app.use(express.json({ limit: '10mb' }));
 
-controllerRouting(app);
+app.use('/', router);
 
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
-});
+app.listen(port);
 
 export default app;
